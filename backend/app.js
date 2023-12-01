@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 
+import adminRoutes from './routes/adminRoutes.js';
+
 dotenv.config();
 
 const app = express();
@@ -18,5 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // Routes
+app.use('/api/admin', adminRoutes);
 
 export default app;
