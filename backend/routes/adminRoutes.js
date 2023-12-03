@@ -7,7 +7,7 @@ import {
 
 const router = express.Router();
 
-router.post('/register', registerAdmin);
+router.post('/register/:role', registerAdmin);
 router.post('/login', loginAdmin);
 router.get('/profile/:id', adminProfile);
 

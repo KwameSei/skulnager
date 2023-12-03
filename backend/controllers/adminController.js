@@ -59,12 +59,15 @@ export const registerAdmin = async (req, res) => {
       { name, email, phone, role, schoolName },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: process.env.JWT_EXPIRES_IN,
       }
     );
 
     // Create new Admin
     const newAdmin = new Admin(req.body);
+
+    // Save the new admin to the database
+    await newAdmin.save();
     
     res.status(201).json({
       success: true,
