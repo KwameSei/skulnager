@@ -19,7 +19,7 @@ import {
 export const loginUser = (fields, role) => async (dispatch) => {
   dispatch(authRequest());
 
-  const URL = import.meta.env.VITE_SERVER_URL;
+  const URL = import.meta.env.VITE_SERVER_URL; 
 
   try {
     const response = await axios.post(`${URL}/api/admin/${role}login`, fields, {

@@ -8,7 +8,7 @@ import {
 const router = express.Router();
 
 router.post('/register/:role', registerAdmin);
-router.post('/login', loginAdmin);
+router.post('/login/:role', loginAdmin);
 router.get('/profile/:id', adminProfile);
 
 export default router;

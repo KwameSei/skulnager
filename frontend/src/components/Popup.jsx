@@ -36,11 +36,11 @@ const Popup = ({ message, setShowPopup, showPopup}) => {
         {
           (message == 'Successful' ?
             <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-              {typeof message == 'string' ? message : message.map((item, index) => <li key={index}>{item}</li>) }
+              {typeof message == 'string' ? message : message && message.map((item, index) => <li key={index}>{item}</li>) }
             </Alert>
             :
             <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-              {typeof message == 'string' ? message : message.map((item, index) => <li key={index}>{item}</li>) }
+              {typeof message == 'string' ? message : message && message.map((item, index) => <li key={index}>{item}</li>) }
             </Alert>
           )
         }

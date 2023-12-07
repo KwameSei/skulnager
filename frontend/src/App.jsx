@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
-import { RegisterAdmin, AdminDashboard } from './screens/index';
+import { 
+  RegisterAdmin, 
+  LoginAdmin,
+  UserOptions,
+  AdminDashboard,
+  Homepage, 
+} from './screens/index';
 import './App.css'
 
 function App() {
@@ -14,6 +20,8 @@ function App() {
   useEffect(() => {
     // Check if currentRole is not undefined (meaning user info is available)
     if (currentRole !== undefined) {
+      // Store currentRole in localStorage
+      localStorage.setItem('currentRole', currentRole);
       setLoading(false);
     }
   }, [currentRole]);
@@ -24,49 +32,58 @@ function App() {
 
   return (
     <Router>
-      {currentRole == null &&
-        <Routes>
-          {/* <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} /> */}
+      <Routes>
+        {currentRole == null && (
+          <>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/select-user" element={<UserOptions visitor="normal" />} />
+          <Route path="/select-guest" element={<UserOptions visitor="guest" />} />
           {/* <Route path="/admin-dashboard" element={<AdminDashboard />} /> */}
           <Route path="/admin-register" element={<RegisterAdmin />} />
-          <Route path='*' element={<Navigate to='/' />} />
-        </Routes>
-      }
 
-      {currentRole == 'Admin' && 
-        <Routes>
+          <Route path="/admin-login" element={<LoginAdmin role="Admin" />} />
+          <Route path='/teacher-login' element={<LoginAdmin role="Teacher" />} />
+          <Route path='/student-login' element={<LoginAdmin role="Student" />} />
+          <Route path='/user-login' element={<LoginAdmin role="User" />} />
+          {/* <Route path="/admin-login" element={<LoginAdmin />} /> */}
+          <Route path='*' element={<Navigate to='/' />} />
+        </>
+      )}
+
+      {currentRole == 'Admin' && (
+        <>
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          {/* <Route path="/admin-login" element={<LoginAdmin />} /> */}
           {/* <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} /> */}
           {/* <Route path="*" element={<Navigate to />} /> */}
-        </Routes>
-      }
+        </>
+      )}
 
-      {currentRole == 'Student' &&
-        <Routes>
+      {currentRole == 'Student' && (
+        <>
           {/* <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} /> */}
-        </Routes>
-      }
+        </>
+      )}
 
-      {currentRole == 'Teacher' &&
-        <Routes>
+      {currentRole == 'Teacher' && (
+        <>
           {/* <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} /> */}
-        </Routes>
-      }
+        </>
+      )}
 
-      {currentRole == 'User' &&
-        <Routes>
+      {currentRole == 'User' && (
+        <>
           {/* <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} /> */}
-        </Routes>
-      }
+        </>
+      )}
+      </Routes>
     </Router>
   )
 
