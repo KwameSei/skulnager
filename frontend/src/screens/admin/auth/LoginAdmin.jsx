@@ -8,13 +8,13 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Popup } from '../../../components';
 // import { localStorage } from 'localStorage';
 
-import { authSuccess } from '../../../state-management/userState/userSlice';
+import { authSuccess, updateUserRole } from '../../../state-management/userState/userSlice';
 
 import classes from './RegisterAdmin.module.scss';
 
 const theme = createTheme();
 
-const LoginAdmin = ({ role }) => {
+const LoginAdmin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [openPopup, setOpenPopup] = useState(false);
@@ -31,9 +31,27 @@ const LoginAdmin = ({ role }) => {
   const [studentNameError, setStudentNameError] = useState(false);
 
   const currentUser = useSelector(state => state.user.currentUser);
-  const currentRole = currentUser?.admin?.role;
+  // const currentRole = currentUser?.admin?.role;
+  const currentRole = useSelector(state => state.user.currentRole);
   const status = useSelector(state => state.user.status);
   const token = useSelector(state => state.user.token);
+  const role = currentRole || 'Admin';
+
+  // let currentRole = null;
+
+  // // Defining possible roles
+  // const possibleRoles = ['Admin', 'Student', 'Teacher', 'User'];
+
+  // // Iterate through possible roles and check if currentRole is one of them
+  // // If it is, set the currentRole to that role
+  // for (let i = 0; i < possibleRoles.length; i++) {
+  //   if (currentUser?.[possibleRoles[i]]?.role) {
+  //     currentRole = possibleRoles[i];
+  //     break;
+  //   }
+  // }
+
+  console.log('Dynamically determined currentRole:', currentRole);
 
   console.log('currentUser in login:', currentUser);
   console.log('currentRole in login:', currentRole);
@@ -45,8 +63,27 @@ const LoginAdmin = ({ role }) => {
 
   const loginHandle = async (e) => {
     e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    console.log('Login handle triggered');
+
+    const emailField = e.target.email;
+    const email = emailField ? emailField.value : ''; // Use conditional check
+
+    const passwordField = e.target.password;
+    const password = passwordField ? passwordField.value : ''; // Use conditional check
+
+    // Conditional checks for student and teacher
+    const rollNumberField = e.target.rollNumber;
+    const rollNumber = rollNumberField ? rollNumberField.value : ''; // Use conditional check
+
+    const studentNameField = e.target.name;
+    const name = studentNameField ? studentNameField.value : ''; // Use conditional check
+
+    const teacherIdField = e.target.teacherId;
+    const teacherId = teacherIdField ? teacherIdField.value : ''; // Use conditional check
+
+    const userIdField = e.target.userId;
+    const userId = userIdField ? userIdField.value : ''; // Use conditional check
+    
   
     if (!email || !password) {
       setEmailError(!email);
@@ -54,12 +91,12 @@ const LoginAdmin = ({ role }) => {
       return;
     }
   
-    const fields = { email, password, role };
+    const fields = { email, password, role, rollNumber, name, teacherId, userId };
   
     setLoading(true);
   
     try {
-      const res = await axios.post(`${URL}/api/admin/login/${role}`, fields, {
+      const res = await axios.post(`${URL}/api/auth/login-user/${role.toLowerCase()}`, fields, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}` || `Bearer ${currentUser.token || ''}`,
@@ -68,44 +105,25 @@ const LoginAdmin = ({ role }) => {
 
       console.log('Response after login:', res);
   
-      if (res.data) {
+      if (res.data.success) {
         // Extract the token from the response
         const token = res.data.token;
-
-        // Store the token in localStorage
+      
+        // Extract the role from the response
+        const userRole = res.data.student?.role || 'Student';
+      
+        // Store the token and role in localStorage
         localStorage.setItem('token', token);
-
+        localStorage.setItem('currentRole', userRole);
+      
         // Handle different roles here
-        const userData = res.data; // Adjust this based on the actual response structure
-  
-        dispatch(authSuccess(userData, role));
-  
-        // Redirect based on the user's role
-        if (role === 'Admin') {
-          navigate('/admin-dashboard');
-        } else if (role === 'Student') {
-          navigate('/student-dashboard');
-        } else if (role === 'Teacher') {
-          navigate('/teacher-dashboard');
-        } else if (role === 'User') {
-          navigate('/user-dashboard');
-        }
-        // switch (role) {
-        //   case 'Admin':
-        //     navigate('/admin-dashboard');
-        //     break;
-        //   case 'Student':
-        //     navigate('/student-dashboard');
-        //     break;
-        //   case 'Teacher':
-        //     navigate('/teacher-dashboard');
-        //     break;
-        //   case 'User':
-        //     navigate('/user-dashboard');
-        //     break;
-        //   default:
-        //     break;
-        // }
+        const userData = res.data;
+      
+        dispatch(authSuccess(userData, userRole));
+        dispatch(updateUserRole(userRole));
+        console.log('Successfully logged in:', userData)
+      
+        navigate('/admin-dashboard');
       } else {
         // If login is not successful, you can handle it accordingly
         navigate('/admin-login');
@@ -120,6 +138,7 @@ const LoginAdmin = ({ role }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('Form submitted!');
     loginHandle(e);
   };
 
@@ -277,7 +296,7 @@ const LoginAdmin = ({ role }) => {
       setPasswordError(false);
     } else if (e.target.name === 'rollNumber') {
       setRollNumberError(false);
-    } else if (e.target.name === 'studentName') {
+    } else if (e.target.name === 'name') {
       setStudentNameError(false);
     }
   }
@@ -296,7 +315,7 @@ const LoginAdmin = ({ role }) => {
           Authorization: `Bearer ${token}` || `Bearer ${currentUser.token || ''}`,
         },
       });
-      console.log('Response after registration:', res);
+      console.log('Response after login:', res);
 
       setGuestLoader(true);
 
@@ -306,9 +325,10 @@ const LoginAdmin = ({ role }) => {
         dispatch(authSuccess(fields, role));
       } else if (role === 'Student') {
         const rollNumber = '1';
-        const studentName = 'Kwame Sei';
-        const fields = { rollNumber, password, studentName };
+        const name = 'Kwame Sei';
+        const fields = { rollNumber, password, name };
         dispatch(authSuccess(fields, role));
+        console.log("Student login", authSuccess(fields, role))
       } else if (role === 'Teacher') {
         const teacherId = '1';
         const email = 'teacher@gmail.com';
@@ -366,33 +386,41 @@ const LoginAdmin = ({ role }) => {
   //   }
   // }, [status, role, navigate, error]);
 
-  useEffect(() => {
-    console.log('useEffect triggered:', status, role);
-    if (status === 'success') {
-      // Redirect based on the user's role
-      if (role === 'Admin') {
-        navigate('/admin-dashboard');
-      } else if (role === 'Student') {
-        navigate('/student-dashboard');
-      } else if (role === 'Teacher') {
-        navigate('/teacher-dashboard');
-      } else if (role === 'User') {
-        navigate('/user-dashboard');
-      }
-    } else if (status === 'failed') {
-      // Handle the failed state
-      setPopupMsg(response.data.data.message);
-      setOpenPopup(true);
-      setLoading(false);
-    } else if (status === 'error') {
-      // Handle the error state
-      setPopupMsg(response.data.message || 'An unexpected error occurred.');
-      setOpenPopup(true);
-      setLoading(false);
-      setGuestLoader(false);
-    }
-  }, [status, currentUser, role, navigate, error]);
-  
+  // useEffect(() => {
+  //   console.log('useEffect triggered:', status, role);
+
+  //   // Log user state and token
+  //   console.log('User State:', currentUser);
+  //   console.log('Token:', token);
+
+  //   if (status === 'idle') {
+  //     // Further code (if needed) when status is 'idle'
+  //   } else if (status === 'success') {
+  //     // Redirect based on the user's role
+  //     if (role === 'Admin') {
+  //       navigate('/admin-dashboard');
+  //     } else if (role === 'Student') {
+  //       navigate('/student-dashboard');
+  //     } else if (role === 'Teacher') {
+  //       navigate('/teacher-dashboard');
+  //     } else if (role === 'User') {
+  //       navigate('/user-dashboard');
+  //     }
+  //   } else if (status === 'failed') {
+  //     // Handle the failed state
+  //     console.log('Failed:', error);
+  //     setPopupMsg('Login failed. Please check your credentials.');
+  //     setOpenPopup(true);
+  //     setLoading(false);
+  //   } else if (status === 'error') {
+  //     // Handle the error state
+  //     console.log('Error:', error);
+  //     setPopupMsg('An unexpected error occurred. Please try again.');
+  //     setOpenPopup(true);
+  //     setLoading(false);
+  //     setGuestLoader(false);
+  //   }
+  // }, [status, role, currentUser, token, navigate, error]);
 
   const handlePopupClose = () => {
     setOpenPopup(false);
@@ -411,19 +439,6 @@ const LoginAdmin = ({ role }) => {
             </Typography>
             <form className={classes.form} onSubmit={handleSubmit}>
               <ThemeProvider theme={theme}>
-                <TextField
-                  variant="outlined"
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name='email'
-                  autoComplete="email"
-                  autoFocus
-                  error={emailError}
-                  onChange={handleInputChange}
-                />
                 <TextField
                   variant="outlined"
                   margin="normal"
@@ -451,6 +466,20 @@ const LoginAdmin = ({ role }) => {
                     )
                   }}
                 />
+                {role === 'Admin' &&
+                  <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="email"
+                    label="Email Address"
+                    id="email"
+                    autoComplete="email"
+                    error={emailError}
+                    onChange={handleInputChange}
+                  />
+                }
                 {role === 'Student' &&
                   <>
                     <TextField
@@ -470,10 +499,10 @@ const LoginAdmin = ({ role }) => {
                       margin="normal"
                       required
                       fullWidth
-                      name="studentName"
+                      name="name"
                       label="Student Name"
-                      id="studentName"
-                      autoComplete="studentName"
+                      id="name"
+                      autoComplete="name"
                       error={studentNameError}
                       onChange={handleInputChange}
                     />

@@ -92,10 +92,10 @@ export const loginAdmin = async (req, res) => {
 
     // Validate user input
     if (!(email && password)) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         status: 400,
-        message: "All input is required",
+        message: "Email and password are required",
       });
     }
 
@@ -105,7 +105,7 @@ export const loginAdmin = async (req, res) => {
     // Check if Admin exists
     const adminExists = await Admin.findOne({ email: emailToLower });
     if (!adminExists) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         status: 400,
         message: "Admin does not exist",
@@ -118,7 +118,7 @@ export const loginAdmin = async (req, res) => {
       adminExists.password
     );
     if (!isPasswordCorrect) {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         status: 400,
         message: "Invalid credentials",

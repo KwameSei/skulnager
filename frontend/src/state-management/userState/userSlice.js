@@ -27,6 +27,7 @@ const userSlice = createSlice({
       state.response = null;
     },
     authSuccess: (state, action) => {
+      console.log('authSuccess payload:', action.payload);
       state.status = 'success';
       state.currentUser = action.payload;
       state.currentRole = action.payload.role;
@@ -100,6 +101,9 @@ const userSlice = createSlice({
       state.error = null;
       state.tempUserInfo = action.payload;
     },
+    updateUserRole: (state, action) => {
+      state.currentRole = action.payload;
+    },
     toggleDarkMode: (state) => {
       state.darkMode = !state.darkMode;
     },
@@ -121,6 +125,7 @@ export const {
   getEror,
   StaffAdded,
   underControl,
+  updateUserRole,
   toggleDarkMode,
 } = userSlice.actions;
 

@@ -21,7 +21,21 @@ const UserOptions = ({ visitor }) => {
   const password = '123';
 
   const currentUser = useSelector(state => state.user.currentUser);
-  const currentRole = useSelector(state => state.user.currentUser?.admin?.role);
+  // const currentRole = useSelector(state => state.user.currentUser?.admin?.role);
+  let currentRole = null;
+
+  if (currentUser) {
+    if (currentUser.admin) {
+      currentRole = currentUser.admin.role;
+    } else if (currentUser.student) {
+      currentRole = currentUser.student.role;
+    } else if (currentUser.teacher) {
+      currentRole = currentUser.teacher.role;
+    } else if (currentUser.user) {
+      currentRole = currentUser.user.role;
+    }
+  }
+
   const status = useSelector(state => state.user.status);
 
   const URL = import.meta.env.VITE_SERVER_URL;

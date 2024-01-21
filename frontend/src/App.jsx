@@ -4,33 +4,65 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import { 
   RegisterAdmin, 
   LoginAdmin,
+  LoginStudent,
   UserOptions,
   AdminDashboard,
-  Homepage, 
+  Homepage,
+  StudentDashboard,
 } from './screens/index';
 import './App.css'
 
 function App() {
 
-  const currentRole = useSelector(state => state.user.currentUser?.admin?.role);
-  const [loading, setLoading] = useState(false);
+  const currentUser = useSelector(state => state.user.currentUser);
+  // const currentRole = useSelector(state => state.user.currentUser?.admin?.role);
+  // let currentRole = useSelector(state => state.user.currentUser?.admin?.role) || useSelector(state => state.user.currentUser?.student?.role) || useSelector(state => state.user.currentUser?.teacher?.role) || useSelector(state => state.user.currentUser?.user?.role);
+  let currentRole = null;
+
+  if (currentUser) {
+    if (currentUser.admin) {
+      currentRole = currentUser.admin.role;
+    } else if (currentUser.student) {
+      currentRole = currentUser.student.role;
+    } else if (currentUser.teacher) {
+      currentRole = currentUser.teacher.role;
+    } else if (currentUser.user) {
+      currentRole = currentUser.user.role;
+    }
+  }
+
+  // let currentRole = null;
+
+  // // // Defining possible roles
+  // const possibleRoles = ['Admin', 'Student', 'Teacher', 'User'];
+
+  // // Iterate through possible roles and check if currentRole is one of them
+  // // If it is, set the currentRole to that role
+  // for (let i = 0; i < possibleRoles.length; i++) {
+  //   if (currentUser?.[possibleRoles[i]]?.role) {
+  //     currentRole = possibleRoles[i];
+  //     break;
+  //   }
+  // }
+  // const [ loading, setLoading ] = useState(true);
 
   console.log('currentRole in app: ', currentRole);
 
   useEffect(() => {
     // Check if currentRole is not undefined (meaning user info is available)
-    if (currentRole !== undefined) {
+    if (currentRole) {
+      console.log('Setting currentRole in localStorage:', currentRole);
       // Store currentRole in localStorage
       localStorage.setItem('currentRole', currentRole);
-      setLoading(false);
+      // setLoading(false);
     }
   }, [currentRole]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  return (
+  return (  
     <Router>
       <Routes>
         {currentRole == null && (
@@ -43,7 +75,7 @@ function App() {
 
           <Route path="/admin-login" element={<LoginAdmin role="Admin" />} />
           <Route path='/teacher-login' element={<LoginAdmin role="Teacher" />} />
-          <Route path='/student-login' element={<LoginAdmin role="Student" />} />
+          <Route path='/student-login' element={<LoginStudent role="Student" />} />
           <Route path='/user-login' element={<LoginAdmin role="User" />} />
           {/* <Route path="/admin-login" element={<LoginAdmin />} /> */}
           <Route path='*' element={<Navigate to='/' />} />
@@ -52,7 +84,7 @@ function App() {
 
       {currentRole == 'Admin' && (
         <>
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-dashboard/*" element={<AdminDashboard />} />
           {/* <Route path="/admin-login" element={<LoginAdmin />} /> */}
           {/* <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} /> */}
@@ -62,8 +94,8 @@ function App() {
 
       {currentRole == 'Student' && (
         <>
-          {/* <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
+          <Route path="/student-dashboard/*" element={<StudentDashboard />} />
+          {/* <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} /> */}
         </>
       )}
