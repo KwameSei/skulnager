@@ -207,11 +207,13 @@ export const loginTeacher = async (req, res) => {
 export const getTeachers = async (req, res) => {
   try {
     // Find all teachers
-    const teachers = await Teacher.find({ school: req.params.id })
+    const teachers = await Teacher.find()
       .populate("school", "schoolName")
       .populate("subjectTaught", "subjectName")
       .populate("classesTaught", "sclassName")
       .select("-password");
+
+    console.log("teachers: ", teachers);
 
     // Check if teachers exist
     if (!teachers) {

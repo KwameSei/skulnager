@@ -63,3 +63,17 @@ const teacherSlice = createSlice({
     },
   },
 });
+
+export const {
+  getRequest,
+  getSuccess,
+  doneSuccess,
+  getFailure,
+  stuffDone,
+  getError,
+  resetStatus,
+  underTeacherControl,
+  setSchoolId,
+} = teacherSlice.actions;
+
+export const teacherReducer = teacherSlice.reducer;
