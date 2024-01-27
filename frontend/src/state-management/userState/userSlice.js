@@ -89,7 +89,7 @@ const userSlice = createSlice({
       state.response = null;
       state.error = null;
     },
-    getEror: (state, action) => {
+    getError: (state, action) => {
       state.loading = false;
       state.response = action.payload;
       state.error = action.payload;
@@ -122,7 +122,7 @@ export const {
   getRequest,
   getSuccess,
   getFailure,
-  getEror,
+  getError,
   StaffAdded,
   underControl,
   updateUserRole,

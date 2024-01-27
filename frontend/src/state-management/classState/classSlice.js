@@ -6,7 +6,8 @@ const initialState = {
   classStudents: [],
   classDetails: [],
   subjects: [],
-  SubjectDetails: [],
+  subjectDetails: [],
+  subjectId: null,
   loading: false,
   subloading: false,
   error: null,
@@ -27,6 +28,12 @@ const classSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.classList = action.payload || [];
+      state.response = null;
+    },
+    getSubjects: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.subjects = action.payload || [];
       state.response = null;
     },
     getFailure: (state, action) => {
@@ -91,6 +98,9 @@ const classSlice = createSlice({
       state.subjects = [];
       state.classList = [];
     },
+    setSubjectId: (state, action) => {
+      state.subjectId = action.payload;
+    },
     detailsSuccess: (state, action) => {
       state.loading = false;
       state.error = null;
@@ -103,7 +113,7 @@ const classSlice = createSlice({
     getSubDetailsSuccess: (state, action) => {
       state.subloading = false;
       state.error = null;
-      state.SubjectDetails = action.payload;
+      state.subjectDetails = action.payload;
       state.response = null;
     },
     resetStudentsStatus: (state) => {
@@ -130,6 +140,7 @@ const classSlice = createSlice({
 export const {
   getRequest,
   getSuccess,
+  getSubjects,
   getFailure,
   stuffDone,
   getError,

@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import { 
   RegisterAdmin, 
   LoginAdmin,
   LoginStudent,
+  LoginTeacher,
   UserOptions,
   AdminDashboard,
   Homepage,
@@ -64,6 +67,18 @@ function App() {
 
   return (  
     <Router>
+      <ToastContainer
+        position='top-right'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={true}
+        rtl={false}
+        pauseOnFocusLoss={true}
+        draggable={true}
+        pauseOnHover={true}
+        theme='colored'
+      />
       <Routes>
         {currentRole == null && (
           <>
@@ -74,7 +89,7 @@ function App() {
           <Route path="/admin-register" element={<RegisterAdmin />} />
 
           <Route path="/admin-login" element={<LoginAdmin role="Admin" />} />
-          <Route path='/teacher-login' element={<LoginAdmin role="Teacher" />} />
+          <Route path='/teacher-login' element={<LoginTeacher role="Teacher" />} />
           <Route path='/student-login' element={<LoginStudent role="Student" />} />
           <Route path='/user-login' element={<LoginAdmin role="User" />} />
           {/* <Route path="/admin-login" element={<LoginAdmin />} /> */}

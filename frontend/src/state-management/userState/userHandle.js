@@ -10,7 +10,7 @@ import {
   getRequest,
   getSuccess,
   getFailure,
-  getEror,
+  getError,
   StaffAdded,
   underControl,
   toggleDarkMode,
@@ -90,7 +90,7 @@ export const getUser = (id, address) => async (dispatch) => {
       dispatch(getFailure(response.data.message));
     }
   } catch (error) {
-    dispatch(getEror(error.message));
+    dispatch(getError(error.message));
   }
 };
 

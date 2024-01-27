@@ -426,12 +426,16 @@ export const getAllStudents = async (req, res) => {
 // Get a student
 export const getStudent = async (req, res) => {
   try {
-    let student = await Student.findById(req.params.id)
+    const studentId = new mongoose.Types.ObjectId(req.params.id);
+    console.log("Student ID: ", studentId);
+
+    let student = await Student.findById(studentId)
       .populate("sclassName", "sclassName")
-      .populate("subjects", "subjectName")
+      .populate("attendance.subjectName", "attendance.subjectName")
       .populate("school", "schoolName")
       .populate("exams.subjectName", "subjectName")
       .populate("attendance.subjectName", "subjectName");
+
     if (student) {
       student.password = undefined;
       res.status(201).json({

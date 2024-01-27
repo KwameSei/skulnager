@@ -9,6 +9,8 @@ import adminRoutes from './routes/adminRoutes.js';
 import classRoute from './routes/classRoute.js';
 import studentRoute from './routes/studentRoute.js';
 import authRoutes from './routes/authRoutes.js';
+import teacherRoutes from './routes/teacherRoutes.js';
+import subjectRoutes from './routes/subjectRoutes.js';
 
 dotenv.config();
 
@@ -27,5 +29,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/class', classRoute);
 app.use('/api/student', studentRoute);
+app.use('/api/teacher', teacherRoutes);
+app.use('/api/subject', subjectRoutes);
 
 export default app;

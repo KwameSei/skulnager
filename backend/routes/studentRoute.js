@@ -17,7 +17,7 @@ const router = express.Router();
 router.post('/create-student/:role', createStudent);
 router.post('/login-student/:role', loginStudent);
 router.get('/get-all-students', adminAuth, getAllStudents);
-router.get('/get-student/:id', getStudent);
+router.get('/get-student/:id', adminAuth, getStudent);
 // router.get('/get-school-id', getSchoolId);
 router.put('update-student/:id', updateStudent);
 router.put('/student-attendance', studentAttendance);

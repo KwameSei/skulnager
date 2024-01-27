@@ -23,16 +23,16 @@ const teacherSchema = new mongoose.Schema({
     type: String,
     default: "Teacher",
   },
-  subjectTaught: {
+  subjectTaught: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "subject",
-    // required: true,
-  },
-  classesTaught: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "studentClass",
     required: true,
-  },
+  }],
+  classesTaught: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Class",
+    required: true,
+  }],
   attendance: [{
     date: {
       type: Date,
