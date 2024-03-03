@@ -26,7 +26,7 @@ export const createSubject = async (req, res) => {
       const newSubjects = subjects.map(subject => ({
           ...subject,
           school: req.body.AdminID,
-          teacher: subject.teacher, // Make sure to provide the correct teacher ID
+          teacher: subject.teacher,
       }));
 
       const existingSubjects = await Subject.find({
@@ -108,8 +108,7 @@ export const getClassSubjects = async (req, res) => {
   try {
     // Find all subjects
     const subjects = await Subject.find({
-      school: req.body.id,
-      sclassName: req.params.id,
+      school: req.body.id
     }).populate("sclassName").populate("teacher", "name").populate("school", "schoolName").select("-school -sclassName -teacher -__v -createdAt -updatedAt -subjectCode -sessions -studentClass -subjectName -subjectCode -school -teacher -__v -createdAt -updatedAt -_id");
 
     console.log("Subjects: ", subjects);
@@ -145,7 +144,7 @@ export const getClassSubjects = async (req, res) => {
 export const getSubject = async (req, res) => {
   try {
     // Find subject by id
-    const subject = await Subject.findById(req.params.id);
+    const subject = await Subject.findById();
 
     if (subject) {
       subject = await subject.populate("sclassName", "sclassName").execPopulate();

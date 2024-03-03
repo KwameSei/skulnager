@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Class from "../models/classSchema.js";
 import Student from "../models/studentSchema.js";
 import Subject from "../models/subjectSchema.js";
@@ -96,7 +97,7 @@ export const getStudentsFromClass = async (req, res) => {
 // Get subjects from a class
 export const getSubjectsFromClass = async (req, res) => {
   try {
-    let subjects = await Subject.find({ studentClass: req.params.id })
+    let subjects = await Subject.find({ sclassName: req.params.id })
     if (subjects.length > 0) {
       res.status(201).json({
         success: true,
@@ -203,10 +204,24 @@ export const deleteClass = async (req, res) => {
 // Get a class
 export const getClass = async (req, res) => {
   try {
-    let foundClass = await Class.findById(req.params.id);
-    
+    console.log('Received id in request parameters: ', req.params.id);
+    const id = req.params.id;
+    console.log('Extracted id: ', id);
+
+    // if (!mongoose.Types.ObjectId.isValid(id)) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     status: 400,
+    //     message: "Invalid class ID format",
+    //   });
+    // }
+
+    let foundClass = await Class.findById(id);
+
     if (foundClass) {
-      foundClass = await foundClass.populate("school", "schoolName").execPopulate();
+      
+      await foundClass.populate("school", "schoolName");
+
       res.status(200).json({
         success: true,
         status: 200,

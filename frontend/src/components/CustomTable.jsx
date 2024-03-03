@@ -3,8 +3,19 @@ import { StyledTableCell, StyledTableRow } from "./styles";
 import { Table, TableBody, TableContainer, TableHead, TablePagination, TableRow, Paper } from "@mui/material";
 
 const CustomTable = ({ buttonHaver: ButtonHaver, columns, rows }) => {
-  const [page, setPage] = useState(0);
+    console.log("Rows in CustomTable:", rows);
+
+    const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    if (!columns || !Array.isArray(columns) || columns.length === 0) {
+        return <h2>No data available</h2>;
+    }
+
+    if (!rows || !Array.isArray(rows) || rows.length === 0) {
+        return <h2>No data available</h2>;
+    }
+
     return (
         <>
             <TableContainer>
@@ -26,11 +37,11 @@ const CustomTable = ({ buttonHaver: ButtonHaver, columns, rows }) => {
                         </StyledTableRow>
                     </TableHead>
                     <TableBody>
-                        {rows
+                        {Array.isArray(rows) && rows.length > 0 && rows
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => {
+                            .map((row, index) => {
                                 return (
-                                    <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                                    <StyledTableRow hover role="checkbox" tabIndex={-1} key={row.id || index}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             return (

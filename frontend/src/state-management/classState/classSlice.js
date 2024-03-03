@@ -8,6 +8,7 @@ const initialState = {
   subjects: [],
   subjectDetails: [],
   subjectId: null,
+  classId: null,
   loading: false,
   subloading: false,
   error: null,
@@ -101,6 +102,9 @@ const classSlice = createSlice({
     setSubjectId: (state, action) => {
       state.subjectId = action.payload;
     },
+    setClassId: (state, action) => {
+      state.classId = action.payload;
+    },
     detailsSuccess: (state, action) => {
       state.loading = false;
       state.error = null;
@@ -153,6 +157,8 @@ export const {
   getSubjectsSuccess,
   resetSubjects,
   detailsSuccess,
+  setSubjectId,
+  setClassId,
   getSubDetailsRequest,
   getSubDetailsSuccess,
   resetStudentsStatus,

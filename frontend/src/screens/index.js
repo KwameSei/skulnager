@@ -17,5 +17,7 @@ export { default as CreateTeacher } from './admin/teacher-affairs/CreateTeacher'
 export { default as AddSubject } from './admin/subject-affairs/AddSubject';
 
 export { default as CreateClass } from './admin/class-affairs/CreateClass';
+export { default as DisplayClass } from './admin/class-affairs/DisplayClass';
+export { default as DisplayAllClasses } from './admin/class-affairs/DisplayAllClasses';
 
 export {default as Homepage } from './home/Homepage';
