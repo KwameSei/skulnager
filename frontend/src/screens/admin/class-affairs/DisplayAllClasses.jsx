@@ -105,7 +105,7 @@ const DisplayAllClasses = () => {
         // Handle delete action
         break;
       case 'add':
-        // Handle add action
+        navigate(`/admin-dashboard/create-class/`)
         break;
       default:
         console.error(`Unsupported action: ${action}`);

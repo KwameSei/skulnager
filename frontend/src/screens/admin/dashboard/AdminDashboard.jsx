@@ -7,7 +7,8 @@ import {
   DisplayClass,
   DisplayAllClasses,
   CreateStudent, 
-  DisplayStudents, 
+  DisplayStudents,
+  DisplayStudent,
   AdminHomepage, 
   StudentAttendance, 
   AddSubject,
@@ -21,6 +22,7 @@ const AdminDashboard = () => {
         <Route path='/' element={<AdminHomepage />} />
         <Route path="/create-student" element={<CreateStudent situation='Student' />} />
         <Route path='/display-students' element={<DisplayStudents />} />
+        <Route path='/display-student/:id' element={<DisplayStudent />} />
         <Route path='/create-class' element={<CreateClass />} />
         <Route path='/display-class/:id' element={<DisplayClass />} />
         <Route path='/create-teacher' element={<CreateTeacher />} />

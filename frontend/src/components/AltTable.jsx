@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper, IconButton } from '@mui/material';
-import { Delete, PostAdd, PersonAddAlt1, AddCard, Visibility } from '@mui/icons-material';
+import { Delete, PostAdd, PersonAddAlt1, AddCard, Visibility, PlusOne } from '@mui/icons-material';
 import { StyledTableCell, StyledTableRow } from "./styles";
 
 const AltTable = ({ columns, rows, handleAction }) => {
@@ -70,10 +70,10 @@ const AltTable = ({ columns, rows, handleAction }) => {
                           })}
                           <StyledTableCell align="center">
                             {/* <ButtonHaver row={row} /> */}
-                            <IconButton onClick={() => handleAction('delete', row)}><Delete /></IconButton>
-                            <IconButton onClick={() => handleAction('add', row)}><PostAdd /></IconButton>
-                            <IconButton onClick={() => handleAction('edit', row)}><PersonAddAlt1 /></IconButton>
+                            <IconButton onClick={() => handleAction('add', row)}><PlusOne /></IconButton>
+                            <IconButton onClick={() => handleAction('edit', row)}><PostAdd /></IconButton>
                             <IconButton onClick={() => handleAction('view', row)}><Visibility /></IconButton>
+                            <IconButton onClick={() => handleAction('delete', row)}><Delete /></IconButton>
                           </StyledTableCell>
                       </StyledTableRow>
                   );

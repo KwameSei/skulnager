@@ -188,7 +188,7 @@ const DisplayStudents = () => {
         <IconButton onClick={() => handleDelete(row.id, 'Student')}>
           <PersonRemove />
         </IconButton>
-        <BlueButton variant='contained' onClick={() => navigate(`/view-student/${row.id}`)}>
+        <BlueButton variant='contained' onClick={() => navigate(`/admin-dashboard/display-student/${row.id}`)}>
           View
         </BlueButton>
         <React.Fragment>

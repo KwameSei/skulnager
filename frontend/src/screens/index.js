@@ -10,6 +10,7 @@ export { default as UserOptions } from './admin/auth/UserOptions';
 export { default as CreateStudent } from './admin/student-affairs/CreateStudent';
 export { default as StudentDashboard } from './admin/student-affairs/StudentDashboard';
 export { default as DisplayStudents } from './admin/student-affairs/DisplayStudents';
+export { default as DisplayStudent } from './admin/student-affairs/DisplayStudent';
 export { default as StudentAttendance } from './admin/student-affairs/StudentAttendance';
 
 export { default as CreateTeacher } from './admin/teacher-affairs/CreateTeacher';
